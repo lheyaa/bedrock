@@ -35,10 +35,10 @@ def add_node(payload: NodeCreate):
         parent_id=payload.parent_id,
     )
 
-@app.patch("/api/nodes/{node)id}", response_model=Node)
+@app.patch("/api/nodes/{node_id}", response_model=Node)
 def edit_node(node_id: str, payload: NodeUpdate):
     updated = store.update_node(node_id, payload.model_dump(exclude_unset=True))
-    if updates is None: 
+    if updated is None:
         raise HTTPException(status_code=404, detail="Node not found")
     return updated
 
@@ -46,5 +46,9 @@ def edit_node(node_id: str, payload: NodeUpdate):
 def remove_node(node_id: str):
     if not store.delete_node(node_id):
         raise HTTPException(status_code=404, detail="Node not found")
+
+@app.get("/api/tree")
+def read_tree():
+    return store.build_tree(store.list_nodes())
 
 app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="static")

@@ -1,4 +1,4 @@
-""""Database connection and schema for Bedrock."""
+"""Database connection and schema for Bedrock."""
 
 import sqlite3
 from pathlib import Path
