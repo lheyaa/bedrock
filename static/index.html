@@ -1,1 +1,195 @@
-placeholder
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bedrock</title>
+<style>
+  :root {
+    --bg: #0f1319;
+    --panel: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --claim: #58a6ff;
+    --assumption: #e3a008;
+    --axiom: #3fb950;
+    --evidence: #a371f7;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 0 16px 64px;
+    background: var(--bg);
+    color: var(--text);
+    font: 15px/1.5 ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
+  }
+
+  header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: baseline;
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 19px;
+    letter-spacing: -0.01em;
+  }
+
+  .tagline {
+    color: var(--muted);
+    font-size: 13px;
+    margin-right: auto;
+  }
+
+  main { max-width: 880px; margin: 0 auto; }
+
+  button {
+    font: inherit;
+    font-size: 13px;
+    color: var(--text);
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 11px;
+    cursor: pointer;
+  }
+
+  button:hover { border-color: var(--muted); }
+
+  button.active {
+    background: #1f6feb;
+    border-color: #1f6feb;
+  }
+
+  .count { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .roots { margin-top: 24px; }
+
+  .roots ul {
+    margin-left: 13px;
+    padding-left: 20px;
+    border-left: 1px solid var(--border);
+  }
+
+  li.node { margin: 3px 0; }
+
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px 4px 6px;
+    border-radius: 7px;
+    border: 1px solid transparent;
+    border-left: 3px solid var(--kind);
+    background: var(--panel);
+  }
+
+  .row:hover { border-color: var(--border); border-left-color: var(--kind); }
+
+  .kind-claim      { --kind: var(--claim); }
+  .kind-assumption { --kind: var(--assumption); }
+  .kind-axiom      { --kind: var(--axiom); }
+  .kind-evidence   { --kind: var(--evidence); }
+
+  select.kind {
+    font: inherit;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--kind);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 2px 4px;
+    cursor: pointer;
+    flex: none;
+  }
+
+  input.text {
+    flex: 1;
+    min-width: 0;
+    font: inherit;
+    color: var(--text);
+    background: transparent;
+    border: none;
+    padding: 2px 0;
+  }
+
+  input.text:focus, input.note:focus { outline: none; }
+  input.text:focus { box-shadow: inset 0 -1px 0 var(--muted); }
+
+  input.note {
+    display: block;
+    width: 100%;
+    font: inherit;
+    font-size: 13px;
+    color: var(--muted);
+    background: transparent;
+    border: none;
+    padding: 2px 0 2px 44px;
+  }
+
+  input.note:placeholder-shown { opacity: 0; }
+  li.node:hover input.note, input.note:focus { opacity: 1; }
+
+  .row button {
+    flex: none;
+    padding: 1px 7px;
+    background: transparent;
+    border-color: transparent;
+    color: var(--muted);
+  }
+
+  .row button:hover { border-color: var(--border); color: var(--text); }
+  .row button.confirm { color: #f85149; border-color: #f85149; }
+
+  li.dim > .row, li.dim > input.note { opacity: 0.25; }
+  li.dim input.note:placeholder-shown { opacity: 0; }
+
+  .empty { color: var(--muted); margin-top: 32px; }
+
+  .error {
+    display: none;
+    margin-top: 20px;
+    padding: 10px 12px;
+    border: 1px solid #f85149;
+    border-radius: 6px;
+    color: #ffa198;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Bedrock</h1>
+  <span class="tagline">Dig until you hit something you can't argue with.</span>
+  <button id="add-root">+ Claim</button>
+  <button id="rebuild">Rebuild &uarr;</button>
+  <span class="count" id="count"></span>
+</header>
+
+<main>
+  <div id="error" class="error"></div>
+  <p id="empty" class="empty">Nothing here yet. Add a claim you believe, then break it down.</p>
+  <div id="tree"></div>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
